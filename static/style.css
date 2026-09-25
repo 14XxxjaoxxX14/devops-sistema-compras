@@ -1,8 +1,4 @@
-/* ==========================================
-   TEMA GAMER / HARDWARE (PRETO E VERMELHO)
-   ========================================== */
 
-/* Configuração Geral e Fundo Escuro */
 * {
     margin: 0;
     padding: 0;
@@ -22,7 +18,7 @@ body {
     margin: 0 auto;
 }
 
-/* Cabeçalho */
+
 header {
     margin-bottom: 30px;
     text-align: center;
@@ -36,9 +32,7 @@ header h1 {
     text-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
 }
 
-/* ==========================================
-   ALERTAS E MENSAGENS DE FEEDBACK
-   ========================================== */
+
 .alerts {
     margin-bottom: 20px;
 }
@@ -75,9 +69,7 @@ header h1 {
     border: 1px solid #38bdf8;
 }
 
-/* ==========================================
-   LAYOUT EM GRID
-   ========================================== */
+
 .grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -90,9 +82,7 @@ header h1 {
     }
 }
 
-/* ==========================================
-   CARTÕES ESCUROS (ESTILO TERABYTE)
-   ========================================== */
+
 .card {
     background-color: #131822;
     border: 1px solid #212838;
@@ -124,9 +114,7 @@ header h1 {
     margin-bottom: 0;
 }
 
-/* ==========================================
-   CAMPOS DE TEXTO E ENTRADA (INPUTS)
-   ========================================== */
+
 .form-row {
     display: flex;
     gap: 12px;
@@ -166,9 +154,7 @@ header h1 {
 .flex-1 { flex: 1; min-width: 100px; }
 .flex-2 { flex: 2; min-width: 180px; }
 
-/* ==========================================
-   BOTÕES GAMER
-   ========================================== */
+
 .btn {
     padding: 11px 20px;
     border-radius: 6px;
@@ -184,7 +170,7 @@ header h1 {
     justify-content: center;
 }
 
-/* Botão Principal - Vermelho Gamer */
+
 .btn-primary {
     background-color: #ff003c;
     color: #ffffff;
@@ -196,7 +182,7 @@ header h1 {
     transform: translateY(-1px);
 }
 
-/* Botão Secundário - Cinza Escuro */
+
 .btn-secondary {
     background-color: #2d3748;
     color: #ffffff;
@@ -206,7 +192,7 @@ header h1 {
     background-color: #3d4b60;
 }
 
-/* Botão Finalizar Compra - Verde Destaque PIX/Sucesso */
+
 .btn-success {
     background-color: #ff003c;
     color: #ffffff;
@@ -304,9 +290,7 @@ tr:last-child td {
     padding: 20px 0;
 }
 
-/* ==========================================
-   RESUMO DO PEDIDO E VALORES
-   ========================================== */
+
 .summary-details {
     display: flex;
     flex-direction: column;
@@ -373,9 +357,7 @@ tr:last-child td {
     border: 1px solid #ff9800;
 }
 
-/* ==========================================
-   HISTÓRICO DE COMPRAS
-   ========================================== */
+
 .history-list {
     display: flex;
     flex-direction: column;

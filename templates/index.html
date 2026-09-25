@@ -12,7 +12,6 @@
             <h1>🛒 Sistema de Compras</h1>
         </header>
 
-        <!-- Mensagens de Feedback -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="alerts">
@@ -26,9 +25,9 @@
         {% endwith %}
 
         <div class="grid">
-            <!-- Coluna Principal: Adicionar Produto + Carrinho -->
+
             <main>
-                <!-- Formulário para Adicionar Item -->
+ 
                 <section class="card">
                     <h2>Adicionar Produto ao Carrinho</h2>
                     <form action="{{ url_for('adicionar_item') }}" method="POST" class="form-row">
@@ -48,7 +47,7 @@
                     </form>
                 </section>
 
-                <!-- Tabela de Itens no Carrinho -->
+
                 <section class="card">
                     <div class="card-header">
                         <h2>Itens no Carrinho</h2>
@@ -94,7 +93,7 @@
                 </section>
             </main>
 
-            <!-- Coluna Lateral: Resumo + Histórico -->
+  
             <aside>
                 <!-- Card de Resumo e Pagamento -->
                 <section class="card summary-card">
@@ -135,7 +134,7 @@
                     </form>
                 </section>
 
-                <!-- Card do Histórico de Compras -->
+
                 <section class="card">
                     <h2>Histórico de Compras</h2>
                     {% if historico %}
