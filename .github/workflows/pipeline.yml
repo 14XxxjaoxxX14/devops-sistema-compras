@@ -31,5 +31,6 @@ jobs:
     # 4. Executa a sua suíte de testes unitários
     - name: Executar Testes Unitários
       run: |
+        pytest
         python -m unittest test_sistema_compras.py
         
