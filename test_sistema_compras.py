@@ -31,7 +31,7 @@ def test_calcular_total_com_sucesso(sistema, carrinho_exemplo):
     """Garante o cálculo correto da soma de itens do carrinho."""
     # (50.0 * 2) + (150.0 * 1) = 250.0
     total = sistema.calcular_total(carrinho_exemplo)
-    assert total  250.0
+    assert total == 250.0
 
 
 def test_calcular_total_carrinho_vazio_lanca_excecao(sistema):
