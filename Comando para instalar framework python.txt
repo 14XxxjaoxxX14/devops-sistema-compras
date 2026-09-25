@@ -1,0 +1,5 @@
+---- Digite no terminal do Vs code na respectiva ordem:
+1- python -m venv venv
+2- pip install flask
+3- python app.py
+4- Depois acesse http://127.0.0.1:5000 em seu navegador

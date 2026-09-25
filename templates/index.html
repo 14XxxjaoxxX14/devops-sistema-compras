@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Compras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 Sistema de Compras</h1>
+        </header>
+
+        <!-- Mensagens de Feedback -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="grid">
+            <!-- Coluna Principal: Adicionar Produto + Carrinho -->
+            <main>
+                <!-- Formulário para Adicionar Item -->
+                <section class="card">
+                    <h2>Adicionar Produto ao Carrinho</h2>
+                    <form action="{{ url_for('adicionar_item') }}" method="POST" class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="nome">Nome do Produto</label>
+                            <input type="text" id="nome" name="nome" placeholder="Ex: Camiseta" required>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="preco">Preço Unitário (R$)</label>
+                            <input type="number" id="preco" name="preco" step="0.01" min="0" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="quantidade">Qtd.</label>
+                            <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                    </form>
+                </section>
+
+                <!-- Tabela de Itens no Carrinho -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2>Itens no Carrinho</h2>
+                        {% if carrinho %}
+                            <form action="{{ url_for('limpar_carrinho') }}" method="POST">
+                                <button type="submit" class="btn btn-link-danger">Esvaziar Carrinho</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    {% if carrinho %}
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Preço Uni.</th>
+                                        <th>Qtd.</th>
+                                        <th>Subtotal</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in carrinho %}
+                                        <tr>
+                                            <td><strong>{{ item.nome }}</strong></td>
+                                            <td>R$ {{ "%.2f"|format(item.preco) }}</td>
+                                            <td>{{ item.quantidade }}</td>
+                                            <td>R$ {{ "%.2f"|format(item.preco * item.quantidade) }}</td>
+                                            <td>
+                                                <form action="{{ url_for('remover_item', idx=loop.index0) }}" method="POST">
+                                                    <button type="submit" class="btn-danger-small">Remover</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="empty-msg">Seu carrinho está vazio no momento.</p>
+                    {% endif %}
+                </section>
+            </main>
+
+            <!-- Coluna Lateral: Resumo + Histórico -->
+            <aside>
+                <!-- Card de Resumo e Pagamento -->
+                <section class="card summary-card">
+                    <h2>Resumo do Pedido</h2>
+                    
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Valor Bruto:</span>
+                            <span>R$ {{ "%.2f"|format(valor_bruto) }}</span>
+                        </div>
+
+                        <form action="{{ url_for('aplicar_desconto') }}" method="POST" class="discount-form">
+                            <label for="desconto">Cupom de Desconto (%)</label>
+                            <div class="inline-input">
+                                <input type="number" id="desconto" name="desconto" step="1" min="0" max="100" value="{{ desconto_pct|int }}">
+                                <button type="submit" class="btn btn-secondary">Aplicar</button>
+                            </div>
+                        </form>
+
+                        <div class="summary-row highlight">
+                            <span>Valor Final:</span>
+                            <strong>R$ {{ "%.2f"|format(valor_final) }}</strong>
+                        </div>
+
+                        <div class="freight-badge {% if frete_gratis %}free{% else %}paid{% endif %}">
+                            {% if frete_gratis %}
+                                🚚 Frete Grátis Liberado!
+                            {% else %}
+                                🚚 Frete Pago (Adicione R$ {{ "%.2f"|format(100.0 - valor_final) }} para Frete Grátis)
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <form action="{{ url_for('finalizar_compra') }}" method="POST">
+                        <button type="submit" class="btn btn-success btn-block" {% if not carrinho %}disabled{% endif %}>
+                            Finalizar Compra
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Card do Histórico de Compras -->
+                <section class="card">
+                    <h2>Histórico de Compras</h2>
+                    {% if historico %}
+                        <div class="history-list">
+                            {% for compra in historico %}
+                                <div class="history-item">
+                                    <div class="history-header">
+                                        <strong>Compra #{{ compra.id }}</strong>
+                                        <span class="badge">R$ {{ "%.2f"|format(compra.valor_final) }}</span>
+                                    </div>
+                                    <ul class="history-products">
+                                        {% for prod in compra.itens %}
+                                            <li>{{ prod.quantidade }}x {{ prod.nome }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <small>Desconto: {{ compra.desconto_pct }}% | Frete Grátis: {{ "SIM" if compra.frete_gratis else "NÃO" }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="empty-msg">Nenhuma compra finalizada até o momento.</p>
+                    {% endif %}
+                </section>
+            </aside>
+        </div>
+    </div>
+</body>
+</html>
